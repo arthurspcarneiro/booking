@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Pay off - Vencimento</h1>
+	Last name: <input type="number" name="myNumber" required><br>
+  {% include '_chart.html' %}
+
+  <script type="text/javascript" class="init">
+	
+    document.getElementById("myChart").style.visibility = "visible"    
+       
+  </script>
+{% endblock %}

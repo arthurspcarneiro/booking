@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Booking{% endblock %}
+
+{% block page_content %}
+
+<div>
+ <label for="legs"> New trade - Number of legs: </label>
+ <select name="legs" id="legs" onchange="showLegs();">
+     <option value selected="0"></option>
+     {% for id,form in forms %}
+     <option value="{{ id }}">{{ id }}</option> 
+     {% endfor %}
+ </select>
+
+
+</div>
+<table class="table-hover" id="booking_trades" data-link="row" style = "visibility : hidden" >
+<thead>
+            <tr>
+                <th scope="col" class="center aligned">Trade date</th>
+                <th scope="col" class="center aligned">Strategy</th>
+                <th scope="col" class="center aligned">Buy/Sell</th>
+                <th scope="col" class="center aligned">Product</th>
+                <th scope="col" class="center aligned">Code</th>
+                <th scope="col" class="center aligned">Strike</th>
+                <th scope="col" class="center aligned">Amount</th>
+                <th scope="col" class="center aligned">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <form class="form" method="post" role="form">  
+            {% for id,form in forms %}
+                {{ form.csrf_token() }}
+            <tr class="{{id}}" id="row {{id}}" style = "visibility : hidden">
+                <td name="trade_date_{{id}}"> {{ wtf.form_field(form.trade_date,form_type="inline") }}  </td>
+                <td name="strategy_{{id}}"> {{ wtf.form_field(form.strategy ,form_type="inline") }} </td>
+                <td name="order_{{id}}"> {{ wtf.form_field(form.order ,form_type="inline") }} </td>
+                <td name="product_{{id}}"> {{ wtf.form_field(form.product ,horizontal_columns=('lg', 0, 5),form_type="inline") }} </td>
+                <td name="code_{{id}}"> {{ wtf.form_field(form.code ,form_type="inline") }} </td>
+                <td name="strike_{{id}}"> {{ wtf.form_field(form.strike ,form_type="inline") }}</td>
+                <td name="amount_{{id}}"> {{ wtf.form_field(form.amount ,form_type="inline") }}</td>
+                <td name="order_{{id}}"> {{ wtf.form_field(form.price ,form_type="inline") }} </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+        <input type="button" name="mostra_dialogo" value="Clique aqui!">
+        <input type="submit" value="Chart" id="chart">
+        <input type="submit" value="Book" id="book" style="float: right;">
+    </form>
+    <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+  
+<!-- {% include '_chart.html' %} --> 
+{% include '_chart.html' %}
+
+<script type="text/javascript" class="init">
+
+
+    function showLegs(){
+        var selectBox = document.getElementById("legs");
+        var userInput = selectBox.options[selectBox.selectedIndex].value
+    
+    
+        if (userInput == "0"){
+            document.getElementById("booking_trades").style.visibility = "hidden"
+            document.getElementById("myChart").style.visibility = "hidden"  
+        } else {
+            document.getElementById("booking_trades").style.visibility = "visible"
+            document.getElementById("myChart").style.visibility = "visible"
+        
+        }
+    
+    
+        for (let i = 1; i <= parseInt(userInput); i++) {
+                document.getElementById("row "+i).style.visibility = "visible"    ;
+        }
+        for (let i = parseInt(userInput)+1; i <= 5; i++) {
+                document.getElementById("row "+i).style.visibility = "hidden"    ;
+        }
+    
+        $('#booking_trades').DataTable( {
+        "lengthMenu": [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]],
+        "bPaginate": false,
+        "bLengthChange": true,
+        "bFilter":false,
+        "bInfo": false,
+        "bAutoWidth": false,
+        "ordering": false,
+        "info":     true,
+        "pageLength": parseInt(userInput)
+    } );        
+    
+    
+    }
+    
+    </script>
+{% endblock %}

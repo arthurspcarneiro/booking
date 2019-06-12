@@ -1,0 +1,36 @@
+<table class="table table-hover table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">Trade date</th>
+                    <th scope="col">Strategy</th>
+                    <th scope="col">Buy/Sell</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Code</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Strike</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for trade in trades %}
+                    <tr id={{ trade.id }}>
+                        <td scope="row">
+                            {{ moment(trade.trade_date).format('L') }}
+                            </td>
+                        <td> 
+                            
+                            <a href="{{ url_for('main.basechart', id=trade.id) }}"> 
+                            {{ trade.strategy }}
+                             </a> 
+                            </td>        
+                        <td> {{ trade.order }} </td>
+                        <td> {{ trade.product }} </td>
+                        <td> {{ trade.code }} </td>
+                        <td> {{ trade.amount }} </td>
+                        <td> {{ trade.price }} </td>
+                        <td> {{ trade.strike }} </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
